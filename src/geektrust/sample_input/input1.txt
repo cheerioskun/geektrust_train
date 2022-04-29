@@ -1,0 +1,6 @@
+/*Please add the sample inputs 
+here specific to the probelm statement*/
+ALLOT_WATER 2 3:7
+ADD_GUESTS 2
+ADD_GUESTS 3
+BILL
