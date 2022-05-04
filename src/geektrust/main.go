@@ -31,6 +31,8 @@ func main() {
 		/*
 			args := scanner.Text()
 			argList := strings.Fields(args)
+
+			Add your code here to process the input commands
 		*/
 
 	}

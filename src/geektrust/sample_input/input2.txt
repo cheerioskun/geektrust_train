@@ -1,5 +1,4 @@
 /*Please add your sample inputs 
-here specific to the probelm statement*/
-ALLOT_WATER 3 2:1
-ADD_GUESTS 4
-ADD_GUESTS 1
+here specific to the problem statement*/
+<INPUT_COMMAND_1> <ARGUMENTS>
+<INPUT_COMMAND_2> <ARGUMENTS>
