@@ -1,4 +1,2 @@
-/*Please add your sample inputs 
-here specific to the problem statement*/
-<INPUT_COMMAND_1> <ARGUMENTS>
-<INPUT_COMMAND_2> <ARGUMENTS>
+TRAIN_A ENGINE NDL NDL KRN GHY SLM NJP NGP BLR
+TRAIN_B ENGINE NJP GHY AGA PNE MAO BPL PTA

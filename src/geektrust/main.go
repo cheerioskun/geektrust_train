@@ -55,7 +55,7 @@ func main() {
 	dstListA = ArriveAtHyb(dstListA, "A")
 	dstListB = ArriveAtHyb(dstListB, "B")
 	// Print the arrival orders
-	fmt.Printf("ARRIVAL TRAIN_A ENGINE %s", strings.Join(dstListA, " "))
-	fmt.Printf("ARRIVAL TRAIN_B ENGINE %s", strings.Join(dstListB, " "))
+	fmt.Printf("ARRIVAL TRAIN_A ENGINE %s\n", strings.Join(dstListA, " "))
+	fmt.Printf("ARRIVAL TRAIN_B ENGINE %s\n", strings.Join(dstListB, " "))
 
 }
