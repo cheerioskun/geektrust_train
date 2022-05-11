@@ -28,21 +28,21 @@ func main() {
 
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
-	var stationListA, stationListB []string
+	var dstListA, dstListB []string
 	// Input start.
 	for scanner.Scan() {
 		line := scanner.Text()
-		stationList := strings.Fields(line)
+		dstList := strings.Fields(line)
 		// First element will be of type "TRAIN_A" or TRAIN_B
-		switch stationList[0] {
+		switch dstList[0] {
 		case "TRAIN_A":
 			{
-				// stationList of form [TRAIN_A, ENGINE, stations...]
-				stationListA = append(stationListA, stationList[2:]...)
+				// dstList of form [TRAIN_A, ENGINE, stations...]
+				dstListA = append(dstListA, dstList[2:]...)
 			}
 		case "TRAIN_B":
 			{
-				stationListB = append(stationListB, stationList[2:]...)
+				dstListB = append(dstListB, dstList[2:]...)
 			}
 		default:
 			{
@@ -51,5 +51,11 @@ func main() {
 		}
 	}
 	// Input complete.
+	// Phase 1: Go to Hyderabad
+	dstListA = ArriveAtHyb(dstListA, "A")
+	dstListB = ArriveAtHyb(dstListB, "B")
+	// Print the arrival orders
+	fmt.Printf("ARRIVAL TRAIN_A ENGINE %s", strings.Join(dstListA, " "))
+	fmt.Printf("ARRIVAL TRAIN_B ENGINE %s", strings.Join(dstListB, " "))
 
 }
