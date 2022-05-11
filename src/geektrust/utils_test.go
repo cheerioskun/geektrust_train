@@ -1,24 +1,44 @@
 package main
 
-import "testing"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"testing"
+)
 
-func TestRemoveTillHyb(t *testing.T) {
+func TestParseInput(t *testing.T) {
+	filePath := "./sample_input/test.txt"
+	file, err := os.Open(filePath)
+	if err != nil {
+		fmt.Println("Error opening the input file")
+		return
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	bogieListA, bogieListB := ParseInput(scanner)
+	if !isEqualSlice(bogieListA, []string{"SLM", "BLR", "KRN", "HYB", "SLM", "NGP", "ITJ"}) ||
+		!isEqualSlice(bogieListB, []string{"SRR", "MAO", "NJP", "PNE", "PTA"}) {
+		t.Fail()
+	}
+}
+func TestRemoveTillHyderabad(t *testing.T) {
 	bogieListA := []string{"HYB", "BLR", "SLM", "HYB", "ITJ", "NDL"}
-	processedListA := RemoveTillHyb(bogieListA, TRAIN_A_IDENTIFIER)
+	processedListA := RemoveTillHyderabad(bogieListA, TRAIN_A_IDENTIFIER)
 	if !isEqualSlice(processedListA, []string{"HYB", "HYB", "ITJ", "NDL"}) {
 		t.Fatalf("Failed on case: TRAIN_A: %v\n", bogieListA)
 	}
 	bogieListB := []string{"MAO", "NGP", "ITJ", "TVC", "MAQ", "SRR"}
-	processedListB := RemoveTillHyb(bogieListB, TRAIN_B_IDENTIFIER)
+	processedListB := RemoveTillHyderabad(bogieListB, TRAIN_B_IDENTIFIER)
 	if !isEqualSlice(processedListB, []string{"NGP", "ITJ"}) {
 		t.Fatalf("Failed on case: TRAIN_B: %v\n", bogieListB)
 	}
 }
 
-func TestMergeAtHyb(t *testing.T) {
+func TestMergeAtHyderabad(t *testing.T) {
 	bogieListA := []string{"HYB", "HYB", "ITJ", "NDL"}
 	bogieListB := []string{"GHY", "NGP", "ITJ"}
-	departureList := MergeAtHyb(bogieListA, bogieListB)
+	departureList := MergeAtHyderabad(bogieListA, bogieListB)
 	if !isEqualSlice(departureList, []string{"GHY", "NDL", "ITJ", "ITJ", "NGP"}) {
 		t.Fatalf("Failed on case: TRAIN_A: %v, TRAIN_B: %v", bogieListA, bogieListB)
 	}

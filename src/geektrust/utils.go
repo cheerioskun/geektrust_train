@@ -1,6 +1,11 @@
 package main
 
-import "sort"
+import (
+	"bufio"
+	"errors"
+	"sort"
+	"strings"
+)
 
 const (
 	HYDERABAD_STATION_STRING = "HYB"
@@ -8,9 +13,36 @@ const (
 	TRAIN_B_IDENTIFIER       = "TRAIN_B"
 )
 
-// Removes the bogies that have been detached before arriving at Hyderabad.
-// Returns the list of remaining bogies in order
-func RemoveTillHyb(bogieList []string, train string) []string {
+// Reads input from a scanner and parses into two lists
+func ParseInput(scanner *bufio.Scanner) ([]string, []string) {
+	var bogieListA, bogieListB []string
+	for scanner.Scan() {
+		line := scanner.Text()
+		if line == "" {
+			continue
+		}
+		bogieList := strings.Fields(line)
+
+		switch bogieList[0] {
+		case TRAIN_A_IDENTIFIER:
+			{
+				bogieListA = append(bogieListA, bogieList[2:]...)
+			}
+		case TRAIN_B_IDENTIFIER:
+			{
+				bogieListB = append(bogieListB, bogieList[2:]...)
+			}
+		default:
+			{
+				panic(errors.New("INVALID INPUT"))
+			}
+		}
+	}
+	return bogieListA, bogieListB
+}
+
+// Removes the bogies that have been detached before arriving at Hyderabad and returns the list of remaining bogies in order
+func RemoveTillHyderabad(bogieList []string, train string) []string {
 	var distanceMap map[string]int
 	if train == TRAIN_A_IDENTIFIER {
 		distanceMap = orderA
@@ -18,7 +50,6 @@ func RemoveTillHyb(bogieList []string, train string) []string {
 		distanceMap = orderB
 	}
 	var finalList []string
-	// For each car(characterized by its destination) check if it needs to be detached
 	for _, destination := range bogieList {
 		// Either destination does not belong to this itinerary or arrives before HYB
 		if _, ok := distanceMap[destination]; !ok || distanceMap[destination] >= distanceMap[HYDERABAD_STATION_STRING] {
@@ -29,7 +60,7 @@ func RemoveTillHyb(bogieList []string, train string) []string {
 }
 
 // Merges the two trains at hyderabad and returns departure order
-func MergeAtHyb(bogieListA, bogieListB []string) []string {
+func MergeAtHyderabad(bogieListA, bogieListB []string) []string {
 
 	// Remove all HYB bogies
 	bogieListA = RemoveBogies(bogieListA, HYDERABAD_STATION_STRING)
@@ -37,40 +68,38 @@ func MergeAtHyb(bogieListA, bogieListB []string) []string {
 
 	// Sort the individual trains' bogies based on distance
 	sort.Slice(bogieListA, func(i, j int) bool {
-		a, b := bogieListA[i], bogieListA[j]
-		return distanceFromHyb[b] < distanceFromHyb[a]
+		first, second := bogieListA[i], bogieListA[j]
+		return distanceFromHyderabad[second] < distanceFromHyderabad[first]
 	})
 	sort.Slice(bogieListB, func(i, j int) bool {
-		a, b := bogieListB[i], bogieListB[j]
-		return distanceFromHyb[b] < distanceFromHyb[a]
+		first, second := bogieListB[i], bogieListB[j]
+		return distanceFromHyderabad[second] < distanceFromHyderabad[first]
 	})
 
 	var finalList []string
-	// Final count of bogies is
-	n := len(bogieListA) + len(bogieListB)
-	// Count of how many I've joined from each
-	i, j := 0, 0
+	// Merge routine
+	finalTrainLength := len(bogieListA) + len(bogieListB)
+	indexA, indexB := 0, 0
 	var nextBogie string
-	for i+j < n {
-		if i < len(bogieListA) && j < len(bogieListB) {
+	for indexA+indexB < finalTrainLength {
+		if indexA < len(bogieListA) && indexB < len(bogieListB) {
 			// Both are available
-			a, b := bogieListA[i], bogieListB[j]
-			if distanceFromHyb[a] > distanceFromHyb[b] {
-				// the one at the top of A is further so add it first
-				nextBogie = a
-				i += 1
+			stationA, stationB := bogieListA[indexA], bogieListB[indexB]
+			if distanceFromHyderabad[stationA] > distanceFromHyderabad[stationB] {
+				nextBogie = stationA
+				indexA += 1
 			} else {
-				nextBogie = b
-				j += 1
+				nextBogie = stationB
+				indexB += 1
 			}
-		} else if i == len(bogieListA) {
+		} else if indexA == len(bogieListA) {
 			// Only B is non empty
-			nextBogie = bogieListB[j]
-			j += 1
+			nextBogie = bogieListB[indexB]
+			indexB += 1
 		} else {
 			// Only A is non empty
-			nextBogie = bogieListA[i]
-			i += 1
+			nextBogie = bogieListA[indexA]
+			indexA += 1
 		}
 		finalList = append(finalList, nextBogie)
 	}
@@ -79,12 +108,12 @@ func MergeAtHyb(bogieListA, bogieListB []string) []string {
 
 // Remove bogies with a given destination
 func RemoveBogies(bogieList []string, destination string) []string {
-	i := 0
+	nextInsertPosition := 0
 	for _, val := range bogieList {
 		if val != destination {
-			bogieList[i] = val
-			i += 1
+			bogieList[nextInsertPosition] = val
+			nextInsertPosition += 1
 		}
 	}
-	return bogieList[:i]
+	return bogieList[:nextInsertPosition]
 }
