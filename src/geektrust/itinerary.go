@@ -29,4 +29,16 @@ var (
 		"NJP": 4200,
 		"GHY": 4700,
 	}
+	distanceFromHyb map[string]int
 )
+
+func init() {
+	distanceFromHyb = make(map[string]int)
+	for station, distFromA := range orderA {
+		// The map will have negative values for already passed stations but that is fine
+		distanceFromHyb[station] = distFromA - orderA[HYDERABAD_STATION_STRING]
+	}
+	for station, distFromB := range orderB {
+		distanceFromHyb[station] = distFromB - orderB[HYDERABAD_STATION_STRING]
+	}
+}

@@ -28,24 +28,24 @@ func main() {
 
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
-	var destinationListA, destinationListB []string
+	var bogieListA, bogieListB []string
 	// Input start.
 	for scanner.Scan() {
 		line := scanner.Text()
 		if line == "" {
 			continue
 		}
-		destinationList := strings.Fields(line)
+		bogieList := strings.Fields(line)
 		// First element will be of type "TRAIN_A" or TRAIN_B
-		switch destinationList[0] {
+		switch bogieList[0] {
 		case TRAIN_A_IDENTIFIER:
 			{
-				// destinationList of form [TRAIN_A, ENGINE, stations...]
-				destinationListA = append(destinationListA, destinationList[2:]...)
+				// bogieList of form [TRAIN_A, ENGINE, stations...]
+				bogieListA = append(bogieListA, bogieList[2:]...)
 			}
 		case TRAIN_B_IDENTIFIER:
 			{
-				destinationListB = append(destinationListB, destinationList[2:]...)
+				bogieListB = append(bogieListB, bogieList[2:]...)
 			}
 		default:
 			{
@@ -55,14 +55,14 @@ func main() {
 	}
 	// Input complete.
 	// Phase 1: Go to Hyderabad
-	destinationListA = RemoveTillHyb(destinationListA, TRAIN_A_IDENTIFIER)
-	destinationListB = RemoveTillHyb(destinationListB, TRAIN_B_IDENTIFIER)
+	bogieListA = RemoveTillHyb(bogieListA, TRAIN_A_IDENTIFIER)
+	bogieListB = RemoveTillHyb(bogieListB, TRAIN_B_IDENTIFIER)
 	// Print the arrival orders
-	fmt.Printf("ARRIVAL TRAIN_A ENGINE %s\n", strings.Join(destinationListA, " "))
-	fmt.Printf("ARRIVAL TRAIN_B ENGINE %s\n", strings.Join(destinationListB, " "))
+	fmt.Printf("ARRIVAL TRAIN_A ENGINE %s\n", strings.Join(bogieListA, " "))
+	fmt.Printf("ARRIVAL TRAIN_B ENGINE %s\n", strings.Join(bogieListB, " "))
 
 	// Phase 2: Merge
-	departureList := MergeAtHyb(destinationListA, destinationListB)
+	departureList := MergeAtHyb(bogieListA, bogieListB)
 	// Print departure order
 	fmt.Printf("DEPARTURE TRAIN_AB ENGINE ENGINE %s\n", strings.Join(departureList, " "))
 	// Done

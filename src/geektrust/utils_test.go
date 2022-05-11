@@ -3,24 +3,32 @@ package main
 import "testing"
 
 func TestRemoveTillHyb(t *testing.T) {
-	destinationListA := []string{"HYB", "BLR", "SLM", "HYB", "ITJ", "NDL"}
-	processedListA := RemoveTillHyb(destinationListA, TRAIN_A_IDENTIFIER)
+	bogieListA := []string{"HYB", "BLR", "SLM", "HYB", "ITJ", "NDL"}
+	processedListA := RemoveTillHyb(bogieListA, TRAIN_A_IDENTIFIER)
 	if !isEqualSlice(processedListA, []string{"HYB", "HYB", "ITJ", "NDL"}) {
-		t.Fatalf("Failed on case: TRAIN_A: %v\n", destinationListA)
+		t.Fatalf("Failed on case: TRAIN_A: %v\n", bogieListA)
 	}
-	destinationListB := []string{"MAO", "NGP", "ITJ", "TVC", "MAQ", "SRR"}
-	processedListB := RemoveTillHyb(destinationListB, TRAIN_B_IDENTIFIER)
+	bogieListB := []string{"MAO", "NGP", "ITJ", "TVC", "MAQ", "SRR"}
+	processedListB := RemoveTillHyb(bogieListB, TRAIN_B_IDENTIFIER)
 	if !isEqualSlice(processedListB, []string{"NGP", "ITJ"}) {
-		t.Fatalf("Failed on case: TRAIN_B: %v\n", destinationListB)
+		t.Fatalf("Failed on case: TRAIN_B: %v\n", bogieListB)
 	}
 }
 
 func TestMergeAtHyb(t *testing.T) {
-	destinationListA := []string{"HYB", "HYB", "ITJ", "NDL"}
-	destinationListB := []string{"GHY", "NGP", "ITJ"}
-	departureList := MergeAtHyb(destinationListA, destinationListB)
+	bogieListA := []string{"HYB", "HYB", "ITJ", "NDL"}
+	bogieListB := []string{"GHY", "NGP", "ITJ"}
+	departureList := MergeAtHyb(bogieListA, bogieListB)
 	if !isEqualSlice(departureList, []string{"GHY", "NDL", "ITJ", "ITJ", "NGP"}) {
-		t.Fatalf("Failed on case: TRAIN_A: %v, TRAIN_B: %v", destinationListA, destinationListB)
+		t.Fatalf("Failed on case: TRAIN_A: %v, TRAIN_B: %v", bogieListA, bogieListB)
+	}
+}
+
+func TestRemoveBogies(t *testing.T) {
+	bogieList := []string{"HYB", "BLR", "SLM", "HYB", "ITJ", "NDL"}
+	processedList := RemoveBogies(bogieList, "HYB")
+	if !isEqualSlice(processedList, []string{"BLR", "SLM", "ITJ", "NDL"}) {
+		t.Fail()
 	}
 }
 
