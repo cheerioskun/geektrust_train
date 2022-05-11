@@ -32,6 +32,9 @@ func main() {
 	// Input start.
 	for scanner.Scan() {
 		line := scanner.Text()
+		if line == "" {
+			continue
+		}
 		dstList := strings.Fields(line)
 		// First element will be of type "TRAIN_A" or TRAIN_B
 		switch dstList[0] {
@@ -58,4 +61,9 @@ func main() {
 	fmt.Printf("ARRIVAL TRAIN_A ENGINE %s\n", strings.Join(dstListA, " "))
 	fmt.Printf("ARRIVAL TRAIN_B ENGINE %s\n", strings.Join(dstListB, " "))
 
+	// Phase 2: Merge
+	departureList := MergeAtHyb(dstListA, dstListB)
+	// Print departure order
+	fmt.Printf("DEPARTURE TRAIN_AB ENGINE ENGINE %s\n", strings.Join(departureList, " "))
+	// Done
 }
