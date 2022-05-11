@@ -51,6 +51,5 @@ func main() {
 		}
 	}
 	// Input complete.
-	InitializeStationOrders()
 
 }
