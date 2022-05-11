@@ -1,8 +1,6 @@
 package main
 
 var (
-	// TRAIN_B_ITINERARY = []string{
-
 	// Map station to distance from origin
 	orderA = map[string]int{
 		"CHN": 0,
