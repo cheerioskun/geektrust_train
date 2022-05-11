@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -26,14 +28,29 @@ func main() {
 
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
-
+	var stationListA, stationListB []string
+	// Input start.
 	for scanner.Scan() {
-		/*
-			args := scanner.Text()
-			argList := strings.Fields(args)
-
-			Add your code here to process the input commands
-		*/
-
+		line := scanner.Text()
+		stationList := strings.Fields(line)
+		// First element will be of type "TRAIN_A" or TRAIN_B
+		switch stationList[0] {
+		case "TRAIN_A":
+			{
+				// stationList of form [TRAIN_A, ENGINE, stations...]
+				stationListA = append(stationListA, stationList[2:]...)
+			}
+		case "TRAIN_B":
+			{
+				stationListB = append(stationListB, stationList[2:]...)
+			}
+		default:
+			{
+				panic(errors.New("INVALID INPUT"))
+			}
+		}
 	}
+	// Input complete.
+	InitializeStationOrders()
+
 }
