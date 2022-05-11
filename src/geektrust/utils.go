@@ -12,6 +12,7 @@ func ArriveAtHyb(dstList []string, train string) []string {
 	var finalList []string
 	// For each car(characterized by its destination) check if it needs to be detached
 	for _, dst := range dstList {
+		// Either dst does not belong to this itinerary or arrives before HYB
 		if _, ok := distanceMap[dst]; !ok || distanceMap[dst] >= distanceMap["HYB"] {
 			finalList = append(finalList, dst)
 		}
