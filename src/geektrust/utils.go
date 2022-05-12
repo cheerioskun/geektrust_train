@@ -61,8 +61,7 @@ func RemoveTillHyderabad(bogieList []string, train string) []string {
 
 // Merges the two trains at hyderabad and returns departure order
 func MergeAtHyderabad(bogieListA, bogieListB []string) []string {
-
-	// Remove all HYB bogies
+	// Remove all Hyderabad bogies
 	bogieListA = RemoveBogies(bogieListA, HYDERABAD_STATION_STRING)
 	bogieListB = RemoveBogies(bogieListB, HYDERABAD_STATION_STRING)
 
@@ -76,8 +75,13 @@ func MergeAtHyderabad(bogieListA, bogieListB []string) []string {
 		return distanceFromHyderabad[second] < distanceFromHyderabad[first]
 	})
 
+	finalList := MergeSorted(bogieListA, bogieListB)
+	return finalList
+}
+
+// Merge two sorted lists
+func MergeSorted(bogieListA, bogieListB []string) []string {
 	var finalList []string
-	// Merge routine
 	finalTrainLength := len(bogieListA) + len(bogieListB)
 	indexA, indexB := 0, 0
 	var nextBogie string
